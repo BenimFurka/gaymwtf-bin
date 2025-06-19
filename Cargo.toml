@@ -1,0 +1,15 @@
+[package]
+name = "gaymwtf-bin"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+gaymwtf-core = { git = "https://github.com/BenimFurka/gaymwtf-core.git", rev = "dacb199" }
+macroquad = "0.4"
+anyhow = "1.0"
+noise = "0.8"
+rand = "0.8"
+once_cell = "1.19"
+futures = "0.3.31"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
