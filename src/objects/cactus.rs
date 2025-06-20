@@ -3,7 +3,7 @@ use macroquad::prelude::*;
 use once_cell::sync::Lazy;
 
 static CACTUS_TEXTURE: Lazy<Texture2D> = Lazy::new(|| {
-    load_texture_sync("assets/textures/entities/cactus/cactus.png").expect("Failed to load cactus texture")
+    load_texture_sync("assets/textures/objects/cactus/cactus.png").expect("Failed to load cactus texture")
 });
 
 #[derive(Clone, Debug)]

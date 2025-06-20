@@ -22,29 +22,29 @@ fn load_texture_or_empty(path: &str) -> Texture2D {
         })
 }
 
-static IDLE_UP: Lazy<Texture2D> = Lazy::new(|| load_texture_or_empty("assets/textures/entities/player/idle_up.png"));
-static IDLE_DOWN: Lazy<Texture2D> = Lazy::new(|| load_texture_or_empty("assets/textures/entities/player/idle_down.png"));
-static IDLE_LEFT: Lazy<Texture2D> = Lazy::new(|| load_texture_or_empty("assets/textures/entities/player/idle_left.png"));
-static IDLE_RIGHT: Lazy<Texture2D> = Lazy::new(|| load_texture_or_empty("assets/textures/entities/player/idle_right.png"));
+static IDLE_UP: Lazy<Texture2D> = Lazy::new(|| load_texture_or_empty("assets/textures/objects/player/idle_up.png"));
+static IDLE_DOWN: Lazy<Texture2D> = Lazy::new(|| load_texture_or_empty("assets/textures/objects/player/idle_down.png"));
+static IDLE_LEFT: Lazy<Texture2D> = Lazy::new(|| load_texture_or_empty("assets/textures/objects/player/idle_left.png"));
+static IDLE_RIGHT: Lazy<Texture2D> = Lazy::new(|| load_texture_or_empty("assets/textures/objects/player/idle_right.png"));
 
 static WALK_UP: Lazy<[Texture2D; 2]> = Lazy::new(|| [
-    load_texture_or_empty("assets/textures/entities/player/walk_up_1.png"),
-    load_texture_or_empty("assets/textures/entities/player/walk_up_2.png"),
+    load_texture_or_empty("assets/textures/objects/player/walk_up_1.png"),
+    load_texture_or_empty("assets/textures/objects/player/walk_up_2.png"),
 ]);
 
 static WALK_DOWN: Lazy<[Texture2D; 2]> = Lazy::new(|| [
-    load_texture_or_empty("assets/textures/entities/player/walk_down_1.png"),
-    load_texture_or_empty("assets/textures/entities/player/walk_down_2.png"),
+    load_texture_or_empty("assets/textures/objects/player/walk_down_1.png"),
+    load_texture_or_empty("assets/textures/objects/player/walk_down_2.png"),
 ]);
 
 static WALK_LEFT: Lazy<[Texture2D; 2]> = Lazy::new(|| [
-    load_texture_or_empty("assets/textures/entities/player/walk_left_1.png"),
-    load_texture_or_empty("assets/textures/entities/player/walk_left_2.png"),
+    load_texture_or_empty("assets/textures/objects/player/walk_left_1.png"),
+    load_texture_or_empty("assets/textures/objects/player/walk_left_2.png"),
 ]);
 
 static WALK_RIGHT: Lazy<[Texture2D; 2]> = Lazy::new(|| [
-    load_texture_or_empty("assets/textures/entities/player/walk_right_1.png"),
-    load_texture_or_empty("assets/textures/entities/player/walk_right_2.png"),
+    load_texture_or_empty("assets/textures/objects/player/walk_right_1.png"),
+    load_texture_or_empty("assets/textures/objects/player/walk_right_2.png"),
 ]);
 
 impl PlayerTextures {
