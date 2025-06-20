@@ -4,6 +4,7 @@ pub mod player;
 pub mod tiles;
 pub mod worldgen;
 pub mod menus;
+pub mod utils;
 
 use gaymwtf_core::{
     BiomeRegistry, DrawBatch, ObjectRegistry, TileRegistry, World, TILE_SIZE,

@@ -32,7 +32,8 @@ impl Menu for HowToPlayMenu {
         let lines = [
             "Controls:",
             "WASD - movement",
-            // TODO: Add "F3 - debug",
+            "F3 - debug",
+            "ESC - pause",
         ];
         let start_y = 120.0;
         let line_height = 40.0;
