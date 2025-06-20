@@ -8,8 +8,10 @@ impl Biome for BeachBiome {
         "beach"
     }
 
-    fn is_suitable(&self, height: f64, _moisture: f64, temperature: f64) -> bool {
-        height >= 0.425 && height < 0.45 && temperature > 0.3 && temperature < 0.8
+    fn is_suitable(&self, height: f64, moisture: f64, temperature: f64) -> bool {
+        height >= 0.48 && height <= 0.5 &&
+        moisture >= 0.0 && moisture <= 1.0 &&
+        temperature >= 0.0 && temperature <= 1.0
     }
 
     fn get_ground_tile_type(&self) -> &'static str {

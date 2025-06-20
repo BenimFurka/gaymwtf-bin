@@ -8,8 +8,10 @@ impl Biome for RiverBiome {
         "river"
     }
 
-    fn is_suitable(&self, height: f64, _moisture: f64, _temperature: f64) -> bool {
-        height < 0.425
+    fn is_suitable(&self, height: f64, moisture: f64, temperature: f64) -> bool {
+        height >= 0.0 && height <= 0.48 &&
+        moisture >= 0.0 && moisture <= 1.0 &&
+        temperature >= 0.0 && temperature <= 1.0
     }
 
     fn get_ground_tile_type(&self) -> &'static str {

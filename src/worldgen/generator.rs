@@ -1,7 +1,7 @@
 use gaymwtf_core::{BiomeRegistry, Chunk, ObjectRegistry, TileRegistry, CHUNK_SIZE, TILE_SIZE};
 use macroquad::prelude::*;
 use noise::{NoiseFn, Perlin};
-use ::rand::prelude::thread_rng;
+use ::rand::rng;
 use ::rand::Rng;
 
 pub struct WorldGenerator {
@@ -10,16 +10,30 @@ pub struct WorldGenerator {
     octaves: usize,
     persistence: f64,
     lacunarity: f64,
+    height_offset: (f64, f64),
+    moisture_offset: (f64, f64),
+    temp_offset: (f64, f64),
 }
 
 impl WorldGenerator {
     pub fn new(seed: u32) -> Self {
+        let seed = seed as u64;
+        
         Self {
-            perlin: Perlin::new(seed),
-            scale: 0.002,
+            perlin: Perlin::new(seed as u32),
+            scale: 0.003,
             octaves: 6,
             persistence: 0.8,
             lacunarity: 2.0,
+            height_offset: (0.0, 0.0),
+            moisture_offset: (
+                (seed.wrapping_mul(12345) % 100000) as f64,
+                (seed.wrapping_mul(54321) % 100000) as f64,
+            ),
+            temp_offset: (
+                (seed.wrapping_mul(67890) % 100000) as f64,
+                (seed.wrapping_mul(9876) % 100000) as f64,
+            ),
         }
     }
 
@@ -43,11 +57,9 @@ impl WorldGenerator {
         let nx = self.scale * world_x as f64;
         let ny = self.scale * world_y as f64;
 
-        let height = (self.generate_noise(nx, ny) + 1.0) / 2.0;
-
-        let temp = (self.generate_noise(nx + 10000.0, ny + 10000.0) + 1.0) / 2.0;
-
-        let moist = (self.generate_noise(nx - 10000.0, ny - 10000.0) + 1.0) / 2.0;
+        let height = (self.generate_noise(nx + self.height_offset.0, ny + self.height_offset.1) + 1.0) / 2.0;
+        let temp = (self.generate_noise(nx + self.temp_offset.0, ny + self.temp_offset.1) + 1.0) / 2.0;
+        let moist = (self.generate_noise(nx + self.moisture_offset.0, ny + self.moisture_offset.1) + 1.0) / 2.0;
 
         (height, moist, temp)
     }
@@ -63,7 +75,7 @@ pub async fn generate_chunk(
     let generator = WorldGenerator::new(seed);
     let mut tiles = Vec::new();
     let mut objects = Vec::new();
-    let mut rng = thread_rng();
+    let mut rng = rng();
 
     for y in 0..CHUNK_SIZE {
         for x in 0..CHUNK_SIZE {
@@ -80,7 +92,7 @@ pub async fn generate_chunk(
                 }
 
                 for (object_type, chance) in biome.get_spawnable_objects() {
-                    if rng.gen::<f32>() < chance {
+                    if rng.random::<f32>() < chance {
                         if let Some(mut obj) = object_registry.create_object_by_id(object_type) {
                             obj.set_pos(tile_pos);
                             objects.push(obj);
