@@ -1,4 +1,4 @@
-use gaymwtf_core::{load_texture_sync, DrawBatch, Entity};
+use gaymwtf_core::{load_texture_sync, DrawBatch, Object};
 use macroquad::prelude::*;
 use once_cell::sync::Lazy;
 
@@ -24,7 +24,7 @@ impl SnowTree {
     }
 }
 
-impl Entity for SnowTree {
+impl Object for SnowTree {
     fn get_type_tag(&self) -> &'static str { "snow_tree" }
     fn get_pos(&self) -> Vec2 { self.pos }
     fn get_size(&self) -> Vec2 { self.size }
@@ -39,5 +39,5 @@ impl Entity for SnowTree {
     fn set_size(&mut self, size: Vec2) { self.size = size; }
     fn set_velocity(&mut self, _velocity: Vec2) { }
     
-    fn clone_box(&self) -> Box<dyn Entity> { Box::new(self.clone()) }
+    fn clone_box(&self) -> Box<dyn Object> { Box::new(self.clone()) }
 }

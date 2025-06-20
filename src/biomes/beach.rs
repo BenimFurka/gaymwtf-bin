@@ -16,7 +16,7 @@ impl Biome for BeachBiome {
         "sand"
     }
 
-    fn get_spawnable_entities(&self) -> Vec<(&'static str, f32)> {
+    fn get_spawnable_objects(&self) -> Vec<(&'static str, f32)> {
         vec![]
     }
 

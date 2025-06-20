@@ -1,4 +1,4 @@
-use gaymwtf_core::{Menu, MenuAction, DrawBatch, TileRegistry, EntityRegistry, BiomeRegistry, World, CHUNK_PIXELS, TILE_SIZE};
+use gaymwtf_core::{Menu, MenuAction, DrawBatch, TileRegistry, ObjectRegistry, BiomeRegistry, World, CHUNK_PIXELS, TILE_SIZE};
 use macroquad::prelude::*;
 use crate::player::{Player, PlayerTextures};
 use crate::menus::pause::PauseMenu;
@@ -30,14 +30,14 @@ impl GameMenu {
     pub async fn new(world_name: &str) -> anyhow::Result<Self> {
         let mut tile_registry = TileRegistry::new();
         crate::register_tiles(&mut tile_registry).await?;
-        let mut entity_registry = EntityRegistry::new();
-        crate::register_entities(&mut entity_registry).await?;
+        let mut object_registry = ObjectRegistry::new();
+        crate::register_objects(&mut object_registry).await?;
         let player_textures = PlayerTextures::new()?;
         let player_pos = vec2(TILE_SIZE * 5.0, TILE_SIZE * 5.0);
-        entity_registry.register(Player::new(player_pos, player_textures));
+        object_registry.register(Player::new(player_pos, player_textures));
         let mut biome_registry = BiomeRegistry::new();
         crate::register_biomes(&mut biome_registry).await?;
-        let mut world = World::load_world(&format!("saves/{}", world_name), tile_registry, entity_registry, biome_registry)
+        let mut world = World::load_world(&format!("saves/{}", world_name), tile_registry, object_registry, biome_registry)
             .map_err(|e| anyhow::anyhow!(e))?;
             
         let worldgen_path = format!("saves/{}/gamestate.json", world_name);
@@ -45,9 +45,9 @@ impl GameMenu {
 
         let mut player_pos = Vec2::ZERO;
         'outer: for chunk in world.chunks.values() {
-            for entity in &chunk.entities {
-                if entity.get_type_tag() == "player" {
-                    player_pos = entity.get_pos();
+            for object in &chunk.objects {
+                if object.get_type_tag() == "player" {
+                    player_pos = object.get_pos();
                     break 'outer;
                 }
             }
@@ -76,8 +76,8 @@ impl Menu for GameMenu {
         let screen_size = vec2(screen_width(), screen_height());
         if !self.paused {
             crate::update_camera(&mut self.camera);
-            let player_entities = self.world.get_entities_by_type("player");
-            let player_pos: Vec2 = player_entities.first().map(|e| e.get_pos()).unwrap_or(Vec2::ZERO);
+            let player_objects = self.world.get_objects_by_type("player");
+            let player_pos: Vec2 = player_objects.first().map(|e| e.get_pos()).unwrap_or(Vec2::ZERO);
             self.camera.target = player_pos;
             let player_chunk_pos = (
                 (player_pos.x / CHUNK_PIXELS).floor() as i32,
@@ -93,7 +93,7 @@ impl Menu for GameMenu {
                                 chunk_pos_to_check,
                                 self.seed,
                                 &self.world.tile_registry,
-                                &self.world.entity_registry,
+                                &self.world.object_registry,
                                 &self.world.biome_registry,
                             )
                         ).unwrap();

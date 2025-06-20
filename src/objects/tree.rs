@@ -1,4 +1,4 @@
-use gaymwtf_core::{load_texture_sync, DrawBatch, Entity};
+use gaymwtf_core::{load_texture_sync, DrawBatch, Object};
 use macroquad::prelude::*;
 use once_cell::sync::Lazy;
 
@@ -25,14 +25,14 @@ impl Tree {
     }
 }
 
-impl Entity for Tree {
+impl Object for Tree {
     fn get_type_tag(&self) -> &'static str { "tree" }
     fn get_pos(&self) -> Vec2 { self.pos }
     fn get_size(&self) -> Vec2 { self.size }
     fn get_velocity(&self) -> Vec2 { self.velocity }
 
     fn tick(&mut self, _dt: f32, _world: &mut gaymwtf_core::World) { }
-    fn clone_box(&self) -> Box<dyn Entity> { Box::new(self.clone()) }
+    fn clone_box(&self) -> Box<dyn Object> { Box::new(self.clone()) }
 
     fn set_pos(&mut self, pos: Vec2) { self.pos = pos; }
     fn set_size(&mut self, size: Vec2) { self.size = size; }

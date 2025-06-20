@@ -16,7 +16,7 @@ impl Biome for ForestBiome {
         "grass"
     }
 
-    fn get_spawnable_entities(&self) -> Vec<(&'static str, f32)> {
+    fn get_spawnable_objects(&self) -> Vec<(&'static str, f32)> {
         vec![("tree", 0.1)]
     }
 

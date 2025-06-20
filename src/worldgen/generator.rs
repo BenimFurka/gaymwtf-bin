@@ -1,4 +1,4 @@
-use gaymwtf_core::{BiomeRegistry, Chunk, EntityRegistry, TileRegistry, CHUNK_SIZE, TILE_SIZE};
+use gaymwtf_core::{BiomeRegistry, Chunk, ObjectRegistry, TileRegistry, CHUNK_SIZE, TILE_SIZE};
 use macroquad::prelude::*;
 use noise::{NoiseFn, Perlin};
 use ::rand::prelude::thread_rng;
@@ -57,12 +57,12 @@ pub async fn generate_chunk(
     chunk_pos: (i32, i32),
     seed: u32,
     tile_registry: &TileRegistry,
-    entity_registry: &EntityRegistry,
+    object_registry: &ObjectRegistry,
     biome_registry: &BiomeRegistry,
 ) -> anyhow::Result<Chunk> {
     let generator = WorldGenerator::new(seed);
     let mut tiles = Vec::new();
-    let mut entities = Vec::new();
+    let mut objects = Vec::new();
     let mut rng = thread_rng();
 
     for y in 0..CHUNK_SIZE {
@@ -79,11 +79,11 @@ pub async fn generate_chunk(
                     tiles.push(tile);
                 }
 
-                for (entity_type, chance) in biome.get_spawnable_entities() {
+                for (object_type, chance) in biome.get_spawnable_objects() {
                     if rng.gen::<f32>() < chance {
-                        if let Some(mut entity) = entity_registry.create_entity_by_id(entity_type) {
-                            entity.set_pos(tile_pos);
-                            entities.push(entity);
+                        if let Some(mut obj) = object_registry.create_object_by_id(object_type) {
+                            obj.set_pos(tile_pos);
+                            objects.push(obj);
                         }
                     }
                 }
@@ -93,6 +93,6 @@ pub async fn generate_chunk(
 
     let mut chunk = Chunk::new(vec2(chunk_pos.0 as f32, chunk_pos.1 as f32));
     chunk.tiles = tiles;
-    chunk.entities = entities;
+    chunk.objects = objects;
     Ok(chunk)
 }

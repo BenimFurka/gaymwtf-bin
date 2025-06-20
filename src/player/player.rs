@@ -1,5 +1,5 @@
 use macroquad::prelude::*;
-use gaymwtf_core::{World, load_texture_sync, Direction, DrawBatch, Entity};
+use gaymwtf_core::{World, load_texture_sync, Direction, DrawBatch, Object};
 use once_cell::sync::Lazy;
 
 #[derive(Clone)]
@@ -131,7 +131,7 @@ impl Player {
     }
 }
 
-impl Entity for Player {
+impl Object for Player {
     fn get_type_tag(&self) -> &'static str { "player" }
     fn get_pos(&self) -> Vec2 { self.pos }
     fn get_size(&self) -> Vec2 { self.size }
@@ -168,7 +168,7 @@ impl Entity for Player {
     fn set_size(&mut self, size: Vec2) { self.size = size; }
     fn set_velocity(&mut self, velocity: Vec2) { self.velocity = velocity; }
     
-    fn clone_box(&self) -> Box<dyn Entity> {
+    fn clone_box(&self) -> Box<dyn Object> {
         Box::new(self.clone())
     }
 }

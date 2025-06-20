@@ -1,12 +1,12 @@
 pub mod biomes;
-pub mod entities;
+pub mod objects;
 pub mod player;
 pub mod tiles;
 pub mod worldgen;
 pub mod menus;
 
 use gaymwtf_core::{
-    BiomeRegistry, DrawBatch, EntityRegistry, TileRegistry, World, TILE_SIZE,
+    BiomeRegistry, DrawBatch, ObjectRegistry, TileRegistry, World, TILE_SIZE,
 };
 use macroquad::prelude::*;
 use std::fs;
@@ -18,7 +18,7 @@ use biomes::{
     beach::BeachBiome, desert::DesertBiome, forest::ForestBiome, plains::PlainsBiome,
     river::RiverBiome, snow_forest::SnowForestBiome, snow_plains::SnowPlainsBiome,
 };
-use entities::{cactus::Cactus, snow_tree::SnowTree, tree::Tree};
+use objects::{cactus::Cactus, snow_tree::SnowTree, tree::Tree};
 use player::{Player, PlayerTextures};
 use tiles::{grass::GrassTile, sand::SandTile, snowgrass::SnowGrassTile, water::WaterTile};
 use worldgen::generate_chunk;
@@ -38,7 +38,7 @@ async fn register_tiles(registry: &mut TileRegistry) -> anyhow::Result<()> {
     Ok(())
 }
 
-async fn register_entities(registry: &mut EntityRegistry) -> anyhow::Result<()> {
+async fn register_objects(registry: &mut ObjectRegistry) -> anyhow::Result<()> {
     registry.register(Tree::new(Vec2::ZERO));
     registry.register(SnowTree::new(Vec2::ZERO));
     registry.register(Cactus::new(Vec2::ZERO));
@@ -57,14 +57,14 @@ async fn register_biomes(registry: &mut BiomeRegistry) -> anyhow::Result<()> {
     Ok(())
 }
 
-fn init_registries() -> (TileRegistry, EntityRegistry, BiomeRegistry) {
+fn init_registries() -> (TileRegistry, ObjectRegistry, BiomeRegistry) {
     let mut tile_registry = TileRegistry::new();
-    let mut entity_registry = EntityRegistry::new();
+    let mut object_registry = ObjectRegistry::new();
     let mut biome_registry = BiomeRegistry::new();
     futures::executor::block_on(register_tiles(&mut tile_registry)).unwrap();
-    futures::executor::block_on(register_entities(&mut entity_registry)).unwrap();
+    futures::executor::block_on(register_objects(&mut object_registry)).unwrap();
     futures::executor::block_on(register_biomes(&mut biome_registry)).unwrap();
-    (tile_registry, entity_registry, biome_registry)
+    (tile_registry, object_registry, biome_registry)
 }
 
 fn update_camera(camera: &mut Camera2D) {
@@ -114,13 +114,13 @@ async fn main() -> anyhow::Result<()> {
                         if parts.len() == 3 {
                             let name = parts[1];
                             let seed: u32 = parts[2].parse().unwrap_or(rand::gen_range(0, u32::MAX));
-                            let (tile_registry, entity_registry, biome_registry) = init_registries();
-                            let mut world = World::new(name, tile_registry, entity_registry, biome_registry);
-                            let mut initial_chunk = generate_chunk((0, 0), seed, &world.tile_registry, &world.entity_registry, &world.biome_registry).await?;
+                            let (tile_registry, object_registry, biome_registry) = init_registries();
+                            let mut world = World::new(name, tile_registry, object_registry, biome_registry);
+                            let mut initial_chunk = generate_chunk((0, 0), seed, &world.tile_registry, &world.object_registry, &world.biome_registry).await?;
                             let player_pos = vec2(TILE_SIZE * 5.0, TILE_SIZE * 5.0);
-                            if let Some(mut player) = world.entity_registry.create_entity_by_id("player") {
+                            if let Some(mut player) = world.object_registry.create_object_by_id("player") {
                                 player.set_pos(player_pos);
-                                initial_chunk.entities.push(player);
+                                initial_chunk.objects.push(player);
                             }
                             world.add_chunk(initial_chunk);
                             world.save_world(&format!("saves/{}", name)).ok();

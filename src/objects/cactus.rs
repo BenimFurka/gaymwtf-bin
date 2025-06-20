@@ -1,4 +1,4 @@
-use gaymwtf_core::{load_texture_sync, Direction, DrawBatch, Entity};
+use gaymwtf_core::{load_texture_sync, Direction, DrawBatch, Object};
 use macroquad::prelude::*;
 use once_cell::sync::Lazy;
 
@@ -29,7 +29,7 @@ impl Cactus {
     }
 }
 
-impl Entity for Cactus {
+impl Object for Cactus {
     fn get_type_tag(&self) -> &'static str { "cactus" }
     fn get_pos(&self) -> Vec2 { self.pos }
     fn get_size(&self) -> Vec2 { self.size }
@@ -44,9 +44,9 @@ impl Entity for Cactus {
     fn set_size(&mut self, size: Vec2) { self.size = size; }
     fn set_velocity(&mut self, _velocity: Vec2) { }
 
-    fn collision(&mut self, other: &mut dyn Entity) {
+    fn collision(&mut self, other: &mut dyn Object) {
         other.hurt(self.damage, Direction::Up);
     }
 
-    fn clone_box(&self) -> Box<dyn Entity> { Box::new(self.clone()) }
+    fn clone_box(&self) -> Box<dyn Object> { Box::new(self.clone()) }
 }
