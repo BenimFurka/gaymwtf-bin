@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-gaymwtf-core = "0.1.0"
+gaymwtf-core = "0.2.1"
 macroquad = "0.4"
 anyhow = "1.0"
 noise = "0.9"

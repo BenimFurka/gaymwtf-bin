@@ -1,4 +1,4 @@
-use gaymwtf_core::{load_texture_sync, Direction, DrawBatch, Object};
+use gaymwtf_core::{load_texture_sync, DrawBatch, Object};
 use macroquad::prelude::*;
 use once_cell::sync::Lazy;
 
@@ -10,7 +10,6 @@ static CACTUS_TEXTURE: Lazy<Texture2D> = Lazy::new(|| {
 pub struct Cactus {
     pos: Vec2,
     size: Vec2,
-    damage: i32,
 }
 
 impl Cactus {
@@ -18,7 +17,6 @@ impl Cactus {
         Self { 
             pos, 
             size: vec2(16.0, 16.0), 
-            damage: 1 
         }
     }
 }
@@ -43,10 +41,6 @@ impl Object for Cactus {
     fn set_pos(&mut self, pos: Vec2) { self.pos = pos; }
     fn set_size(&mut self, size: Vec2) { self.size = size; }
     fn set_velocity(&mut self, _velocity: Vec2) { }
-
-    fn collision(&mut self, other: &mut dyn Object) {
-        other.hurt(self.damage, Direction::Up);
-    }
 
     fn clone_box(&self) -> Box<dyn Object> { Box::new(self.clone()) }
 }
